@@ -85,8 +85,8 @@ export default function GLBScene() {
           <br />
 
           <Typography variant="h6" className="mt-4 text-gray-300 ">
-            "Beyond trends, beyond time. A revolution stitched in passion, woven
-            with innovation."
+            &quot;Beyond trends, beyond time. A revolution stitched in passion,
+            woven with innovation.&quot;
           </Typography>
           {/* Floating Drones */}
           <br />

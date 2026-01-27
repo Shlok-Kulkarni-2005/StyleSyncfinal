@@ -318,8 +318,8 @@ const ContactUs = () => {
           Get in Touch
         </h2>
         <p className="text-gray-400 mb-6">
-          We'd love to hear from you! Fill out the form below to connect with
-          us.
+          We&apos;d love to hear from you! Fill out the form below to connect
+          with us.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-left">

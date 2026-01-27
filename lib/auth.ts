@@ -7,6 +7,23 @@ import { getMongoClientPromise } from "@/lib/mongodb";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+type MongoUser = {
+  _id?: { toString(): string };
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  password?: string | null;
+};
+
+type TokenWithExtras = {
+  id?: string;
+  email?: string;
+  name?: string | null;
+  picture?: string | null;
+  accessToken?: string;
+  sub?: string | null;
+} & Record<string, unknown>;
+
 
 const hasMongoUri = Boolean(process.env.MONGODB_URI ?? process.env.NEXT_PUBLIC_MONGODB_URI);
 const hasGoogle = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
@@ -47,23 +64,23 @@ export const authOptions: NextAuthOptions = {
 
         const client = await getMongoClientPromise();
         const db = client.db();
-        const user = await db
+        const user = (await db
           .collection("users")
-          .findOne({ email: credentials.email });
+          .findOne({ email: credentials.email })) as MongoUser | null;
 
         if (!user) return null;
 
-        const hashedPassword = (user as any).password as string | undefined;
+        const hashedPassword = user.password ?? undefined;
         if (!hashedPassword) return null;
 
         const isValid = await bcrypt.compare(credentials.password, hashedPassword);
         if (!isValid) return null;
 
         return {
-          id: (user as any)._id?.toString?.() ?? "",
-          name: (user as any).name,
-          email: (user as any).email,
-          image: (user as any).image,
+          id: user._id?.toString?.() ?? "",
+          name: user.name ?? undefined,
+          email: user.email ?? undefined,
+          image: user.image ?? undefined,
         };
       },
     }),
@@ -73,12 +90,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        (token as any).id = (user as any).id;
-        token.email = user.email;
-        token.name = user.name;
-        token.picture = user.image;
-        (token as any).accessToken = jwt.sign(
-          { userId: (user as any).id },
+        const extendedToken = token as TokenWithExtras;
+        const userId = (user as { id?: string }).id ?? "";
+
+        extendedToken.id = userId;
+        extendedToken.email = user.email ?? undefined;
+        extendedToken.name = user.name ?? null;
+        extendedToken.picture = user.image ?? null;
+        extendedToken.accessToken = jwt.sign(
+          { userId },
           jwtSecret,
           { expiresIn: "7d" }
         );
@@ -86,15 +106,17 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
+      const extendedToken = token as TokenWithExtras;
+
       return {
         ...session,
         user: {
-          id: ((token as any).id ?? token.sub ?? "") as string,
-          email: (token.email ?? "") as string,
-          name: (token.name ?? undefined) as string | undefined,
-          image: ((token as any).picture ?? undefined) as string | undefined,
+          id: (extendedToken.id ?? extendedToken.sub ?? "") || "",
+          email: extendedToken.email ?? "",
+          name: extendedToken.name ?? undefined,
+          image: extendedToken.picture ?? undefined,
         },
-        accessToken: (token as any).accessToken as string | undefined,
+        accessToken: extendedToken.accessToken,
       };
     },
   },

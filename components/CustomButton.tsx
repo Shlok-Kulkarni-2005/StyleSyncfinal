@@ -56,8 +56,14 @@ import { HexColorPicker } from "react-colorful";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 
+interface ModelProps {
+  color: string;
+  texture: string | null;
+  materialType: "Cotton" | "Leather" | "Metallic" | "Glowing";
+}
+
 // Load GLB Model
-const Model = ({ color, texture, materialType }: any) => {
+const Model = ({ color, texture, materialType }: ModelProps) => {
   const modelRef = useRef<THREE.Mesh | null>(null);
   const { scene } = useGLTF("/t_shirt_body_male_copy.glb"); // Ensure this file is in /public
 

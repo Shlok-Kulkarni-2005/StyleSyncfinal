@@ -100,7 +100,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     console.log("Received Checkout Data:", req.body); // Debugging line
 
-    const { quantity, totalAmount, tShirt, size } = req.body;
+    const {
+      quantity,
+      totalAmount,
+      tShirt,
+      size,
+    }: {
+      quantity: number;
+      totalAmount: number;
+      tShirt: {
+        color: string;
+        frontTexture?: string;
+        backTexture?: string;
+      };
+      size: string;
+    } = req.body;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -124,9 +138,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log("Stripe Session Created:", session); // Debugging line
     res.status(200).json({ id: session.id });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Stripe Error:", error);
-    res.status(500).json({ error: error.message });
+    const message =
+      error instanceof Error ? error.message : "Unknown Stripe error";
+    res.status(500).json({ error: message });
   }
 }
-

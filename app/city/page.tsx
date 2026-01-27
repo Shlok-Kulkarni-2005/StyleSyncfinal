@@ -3,22 +3,20 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   OrbitControls,
-  useGLTF,
   Sphere,
   Stars,
   Float,
   MeshDistortMaterial,
 } from "@react-three/drei";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { useRef } from "react";
 import * as THREE from "three";
 import { getProject, val, types } from "@theatre/core";
 import studio from "@theatre/studio";
-import extension from "@theatre/r3f";
+import { extension as theatreExtension } from "@theatre/r3f";
 import { EffectComposer, Bloom, Glitch } from "@react-three/postprocessing";
 
 studio.initialize();
-studio.extend(extension);
+studio.extend(theatreExtension);
 
 const project = getProject("SciFi Cinematic Scene");
 const sheet = project.sheet("Scene");

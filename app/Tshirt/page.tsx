@@ -239,7 +239,7 @@ import { Environment, OrbitControls, useGLTF, Stars } from "@react-three/drei";
 import { Suspense, useRef, useState } from "react";
 import * as THREE from "three";
 import Link from "next/link";
-import { Button, Container, Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useFrame } from "@react-three/fiber";
 
@@ -305,8 +305,8 @@ export default function GLBScene() {
           <br />
 
           <Typography variant="h6" className="mt-4 text-gray-300 ">
-            "Beyond trends, beyond time. A revolution stitched in passion, woven
-            with innovation."
+            &quot;Beyond trends, beyond time. A revolution stitched in passion,
+            woven with innovation.&quot;
           </Typography>
           {/* Floating Drones */}
           <br />

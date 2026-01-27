@@ -529,11 +529,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTShirt } from "@/app/context/TShirtContext";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
-);
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -571,8 +566,6 @@ export default function CheckoutPage() {
   const handleQuantityChange = (change: number) => {
     setQuantity((prev) => Math.max(1, prev + change));
   };
-
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleCheckout = async () => {
     setLoading(true);
