@@ -948,7 +948,7 @@ export default function TShirtCustomizer() {
   const [frontOffset, setFrontOffset] = useState({ x: 0, y: 0 });
   const [backOffset, setBackOffset] = useState({ x: 0, y: 0 });
 
-  const [showLogo, setShowLogo] = useState(true);
+  // const [showLogo, setShowLogo] = useState(true);
   const [showFullTexture, setShowFullTexture] = useState(true);
 
   const modelRef = useRef<THREE.Group>(null!);

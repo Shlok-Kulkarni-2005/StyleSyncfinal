@@ -6,7 +6,12 @@ import { HexColorPicker } from "react-colorful";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 
-const Model = ({ color, materialType }: any) => {
+interface ModelProps {
+  color: string;
+  materialType: string;
+}
+
+const Model = ({ color, materialType }: ModelProps) => {
   const modelRef = useRef<THREE.Mesh | null>(null);
   const { scene } = useGLTF("/hoodie_copy.glb");
 

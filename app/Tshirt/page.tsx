@@ -389,7 +389,7 @@ export default function GLBScene() {
               exclusively for content creators.
               <br />
               <br />
-              Whether you're a writer, designer, video editor, or social media
+              Whether you&apos;re a writer, designer, video editor, or social media
               influencer, we empower you with cutting-edge AI tools to
               streamline your creative process, spark innovation, and elevate
               your content like never before. In a world where creativity meets

@@ -5,9 +5,14 @@ import { OrbitControls, useGLTF, Environment, Stars } from "@react-three/drei";
 import { HexColorPicker } from "react-colorful";
 import { useRef, useState } from "react";
 import * as THREE from "three";
-import Link from "next/link";
+// import Link from "next/link";
 
-const Model = ({ color, materialType }: any) => {
+interface ModelProps {
+  color: string;
+  materialType: string;
+}
+
+const Model = ({ color, materialType }: ModelProps) => {
   const modelRef = useRef<THREE.Mesh | null>(null);
   const { scene } = useGLTF("/t_shirt_body_female_copy.glb");
 

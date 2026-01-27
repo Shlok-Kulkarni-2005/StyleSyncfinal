@@ -11,8 +11,6 @@ import {
 } from "@react-three/drei";
 import { useRef, useState, useEffect } from "react";
 import { HexColorPicker } from "react-colorful";
-import { motion } from "framer-motion";
-import { Paintbrush } from "lucide-react";
 import * as THREE from "three";
 
 const StarField = () => {
@@ -28,6 +26,17 @@ const StarField = () => {
   );
 };
 
+interface ModelProps {
+  color: string;
+  materialType: string;
+  logoTexture: string | null;
+  fullTexture: string | null;
+  logoPosition: [number, number, number];
+  logoScale: [number, number, number];
+  fullTextureOffset: [number, number];
+  fullTextureScale: number;
+}
+
 const Model = ({
   color,
   materialType,
@@ -37,7 +46,7 @@ const Model = ({
   logoScale,
   fullTextureOffset,
   fullTextureScale,
-}: any) => {
+}: ModelProps) => {
   const modelRef = useRef<THREE.Group | null>(null);
   const shirtMeshRef = useRef<THREE.Mesh | null>(null);
   const { scene } = useGLTF("/shirt_baked.glb");
@@ -103,7 +112,7 @@ export default function TextureLogoPage() {
   const [showFullTexture, setShowFullTexture] = useState(true);
 
   const [color, setColor] = useState("#ffffff");
-  const [materialType, setMaterialType] = useState("Cotton");
+  const [materialType] = useState("Cotton");
   const [logoTexture, setLogoTexture] = useState<string | null>(null);
   const [fullTexture, setFullTexture] = useState<string | null>(null);
   const [logoPosition, setLogoPosition] = useState<[number, number, number]>([
