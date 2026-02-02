@@ -87,61 +87,15 @@
 //     return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
 //   }
 // }
-import { NextApiRequest, NextApiResponse } from "next";
-import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+import { NextResponse } from "next/server";
 
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
-
-  try {
-    console.log("Received Checkout Data:", req.body); // Debugging line
-
-    const {
-      quantity,
-      totalAmount,
-      tShirt,
-      size,
-    }: {
-      quantity: number;
-      totalAmount: number;
-      tShirt: {
-        color: string;
-        frontTexture?: string;
-        backTexture?: string;
-      };
-      size: string;
-    } = req.body;
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "inr",
-            product_data: {
-              name: `T-Shirt - ${tShirt.color}, ${size}`,
-              images: [tShirt.frontTexture], // Ensure this is a valid URL
-            },
-            unit_amount: totalAmount * 100, // Convert to cents
-          },
-          quantity: quantity,
-        },
-      ],
-      mode: "payment",
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cancel`,
-    });
-
-    console.log("Stripe Session Created:", session); // Debugging line
-    res.status(200).json({ id: session.id });
-  } catch (error: unknown) {
-    console.error("Stripe Error:", error);
-    const message =
-      error instanceof Error ? error.message : "Unknown Stripe error";
-    res.status(500).json({ error: message });
-  }
+/**
+ * Simple healthcheck for the root `/api` route.
+ *
+ * This avoids using the old `NextApiRequest`/`NextApiResponse` signature,
+ * which is not supported in `app`-router `route.ts` files and can break
+ * the build on Vercel.
+ */
+export function GET() {
+  return NextResponse.json({ status: "ok" });
 }
